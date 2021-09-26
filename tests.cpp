@@ -171,6 +171,59 @@ TEST(PLUS, CORRECT_2) {
   EXPECT_EQ(first_number_big + second_number_big, sum);
 }
 
+TEST(Multiply, CORRECT_1) {
+  long long first_number = 100;
+  long long second_number = 200;
+  BigInteger composition(first_number * second_number);
+
+  BigInteger first_number_big(first_number);
+  BigInteger second_number_big(second_number);
+
+  EXPECT_EQ(first_number_big * second_number_big, composition);
+}
+
+TEST(Multiply, CORRECT_2) {
+  long long first_number = -100;
+  long long second_number = 200;
+  BigInteger composition(first_number * second_number);
+
+  BigInteger first_number_big(first_number);
+  BigInteger second_number_big(second_number);
+
+  EXPECT_EQ(first_number_big * second_number_big, composition);
+}
+
+TEST(Multiply, CORRECT_3) {
+  long long first_number = 0;
+  long long second_number = 200;
+  BigInteger composition(first_number * second_number);
+
+  BigInteger first_number_big(first_number);
+  BigInteger second_number_big(second_number);
+
+  EXPECT_EQ(first_number_big * second_number_big, composition);
+}
+
+TEST(Multiply, CORRECT_4) {
+  long long first_number = -1;
+  long long second_number = 200;
+  BigInteger composition(first_number * second_number);
+
+  BigInteger first_number_big(first_number);
+  BigInteger second_number_big(second_number);
+
+  EXPECT_EQ(first_number_big * second_number_big, composition);
+}
+
+TEST(Divide, CORRECT_1) {
+  EXPECT_EQ(100_bigint / 200_bigint, 100 / 200);
+}
+
+TEST(Divide, CORRECT_2) {
+  EXPECT_EQ(1000_bigint / 300_bigint, 1000 / 300);
+}
+
+
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

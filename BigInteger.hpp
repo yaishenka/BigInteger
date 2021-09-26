@@ -37,6 +37,8 @@ class BigInteger {
 
   BigInteger& operator+=(const BigInteger& value);
   BigInteger& operator-=(const BigInteger& value);
+  BigInteger& operator*=(const BigInteger& value);
+  BigInteger& operator/=(const BigInteger& value);
 
   [[nodiscard]] bool IsLessWithoutSign(const BigInteger& other) const;
 
@@ -46,6 +48,7 @@ class BigInteger {
     *this += 1;
     return *this;
   }
+
   const BigInteger operator++(int) {
     BigInteger copy = *this;
     *this += 1;
@@ -100,6 +103,12 @@ class BigInteger {
   static BigInteger SubstractPositives(const BigInteger& left,
                                        const BigInteger& right);
 
+  static BigInteger MultiplyPositives(const BigInteger& left,
+                                      const BigInteger& right);
+
+  static BigInteger DividePositives(const BigInteger& left,
+                                    const BigInteger& right);
+
   void RemoveLeadingZeros();
 
   void ConstructFromString(const std::string& number);
@@ -108,8 +117,13 @@ class BigInteger {
   bool is_negative_ = false;
 };
 
+BigInteger operator ""_bigint(unsigned long long number);
+
 BigInteger operator+(const BigInteger& left, const BigInteger& right);
 BigInteger operator-(const BigInteger& left, const BigInteger& right);
+BigInteger operator*(const BigInteger& left, const BigInteger& right);
+BigInteger operator/(const BigInteger& left, const BigInteger& right);
+BigInteger operator%(const BigInteger& left, const BigInteger& right);
 
 bool operator<(const BigInteger& left, const BigInteger& right);
 bool operator>(const BigInteger& left, const BigInteger& right);

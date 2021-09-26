@@ -13,6 +13,6 @@ target_link_libraries(Test Threads::Threads ${GTEST_LIBRARIES} ${GMOCK_BOTH_LIBR
 
 add_executable(BigInteger main.cpp BigInteger.cpp)
 
-set(CMAKE_EXE_LINKER_FLAGS --coverage)
-add_definitions(-fprofile-arcs -ftest-coverage)
-target_link_libraries(Test -fprofile-arcs)
+#set(CMAKE_EXE_LINKER_FLAGS --coverage)
+#add_definitions(-fprofile-arcs -ftest-coverage)
+#target_link_libraries(Test -fprofile-arcs)

@@ -7,6 +7,10 @@ BigInteger::BigInteger(const std::string& number) {
 }
 
 BigInteger::BigInteger(long long number) {
+  if (number == 0) {
+    return;
+  }
+
   is_negative_ = number < 0;
 
   if (is_negative_) {
@@ -95,6 +99,22 @@ BigInteger& BigInteger::operator-=(const BigInteger& value) {
 
   *this = SumPositives(*this, value);
   is_negative_ = true;
+
+  return *this;
+}
+
+BigInteger& BigInteger::operator*=(const BigInteger& other) {
+  auto result_sign = is_negative_ ^ other.is_negative_;
+  *this = MultiplyPositives(*this, other);
+  is_negative_ = result_sign;
+
+  return *this;
+}
+
+BigInteger& BigInteger::operator/=(const BigInteger& other) {
+  auto result_sign = is_negative_ ^ other.is_negative_;
+  *this = DividePositives(*this, other);
+  is_negative_ = result_sign;
 
   return *this;
 }
@@ -202,13 +222,77 @@ BigInteger BigInteger::SubstractPositives(const BigInteger& left,
   return result;
 }
 
-void BigInteger::RemoveLeadingZeros() {
-  if (GetSize() == 0) {
-    return;
+BigInteger BigInteger::MultiplyPositives(const BigInteger& left,
+                                         const BigInteger& right) {
+  BigInteger result;
+  if (left.IsZero() || right.IsZero()) {
+    return result;
   }
 
-  if (digits_[GetSize() - 1] == 0) {
-    digits_.clear();
+  result.digits_.resize(left.GetSize() + right.GetSize() + 2);
+
+  for (size_t i = 0; i < left.GetSize(); ++i) {
+    uint8_t transfer = 0;
+    for (size_t j = 0; j < right.GetSize() || transfer != 0; ++j) {
+      uint8_t current = 0;
+      if (j == right.GetSize()) {
+        current = 0;
+      } else {
+        current = left.digits_[i] * right.digits_[j];
+      }
+      uint8_t current_compos = result.digits_[i + j] + current + transfer;
+      result.digits_[i + j] = current_compos % 10;
+      transfer = current_compos / 10;
+    }
+  }
+
+  result.RemoveLeadingZeros();
+  return result;
+}
+
+BigInteger BigInteger::DividePositives(const BigInteger& left,
+                                       const BigInteger& right) {
+  if (right.IsZero()) {
+    throw std::overflow_error("Divide by zero exception");
+  }
+
+  BigInteger result;
+
+  if (left.IsLessWithoutSign(right)) {
+    return result;
+  }
+
+  result.digits_.resize(left.GetSize());
+  BigInteger curr_value;
+
+  for (ssize_t i = left.GetSize() - 1; i >= 0; --i) {
+    curr_value.digits_.insert(curr_value.digits_.begin(), 0);
+    while (curr_value.GetSize() > 1 && *(--curr_value.digits_.end()) == 0) {
+      curr_value.digits_.pop_back();
+    }
+    curr_value.digits_[0] = left.digits_[i];
+    int x = 0;
+    int left_border = 0;
+    int right_border = 9;
+    while (left_border <= right_border) {
+      int mid = (left_border + right_border) / 2;
+      BigInteger current;
+      current = right * mid;
+      if (current <= curr_value) {
+        x = mid;
+        left_border = mid + 1;
+      } else
+        right_border = mid - 1;
+    }
+    result.digits_[i] = x;
+    curr_value -= right * x;
+  }
+  result.RemoveLeadingZeros();
+  return result;
+}
+
+void BigInteger::RemoveLeadingZeros() {
+  if (GetSize() == 0) {
     return;
   }
 
@@ -267,6 +351,10 @@ void BigInteger::ConstructFromString(const std::string& number) {
   }
 }
 
+BigInteger operator""_bigint(unsigned long long number) {
+  return BigInteger(number);
+}
+
 BigInteger operator+(const BigInteger& left, const BigInteger& right) {
   BigInteger copy = left;
   copy += right;
@@ -277,6 +365,25 @@ BigInteger operator-(const BigInteger& left, const BigInteger& right) {
   BigInteger copy = left;
   copy -= right;
   return copy;
+}
+
+BigInteger operator*(const BigInteger& left, const BigInteger& right) {
+  BigInteger copy = left;
+  copy *= right;
+  return copy;
+}
+
+BigInteger operator/(const BigInteger& left, const BigInteger& right) {
+  BigInteger copy = left;
+  copy /= right;
+  return copy;
+}
+
+BigInteger operator%(const BigInteger& left, const BigInteger& right) {
+  auto divide = left / right;
+  auto product = divide * right;
+  auto result = left - product;
+  return result;
 }
 
 bool operator<(const BigInteger& left, const BigInteger& right) {

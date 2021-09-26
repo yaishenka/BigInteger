@@ -3,9 +3,32 @@
 
 int main() {
   BigInteger a;
+  std::string op;
   BigInteger b;
 
-  std::cin >> a >> b;
+  std::cin >> a >> op >> b;
 
-  std::cout << a + b;
+  if (op == "+") {
+    std::cout << (a + b);
+  } else if (op == "-") {
+    std::cout << (a - b);
+  } else if (op == "<") {
+    std::cout << (a < b);
+  } else if (op == "<=") {
+    std::cout << (a <= b);
+  } else if (op == ">") {
+    std::cout << (a > b);
+  } else if (op == ">=") {
+    std::cout << (a >= b);
+  } else if (op == "==") {
+    std::cout << (a == b);
+  } else if (op == "!=") {
+    std::cout << (a != b);
+  } else if (op == "*") {
+    std::cout << (a * b);
+  } else if (op == "/") {
+    std::cout << (a / b);
+  } else if (op == "%") {
+    std::cout << (a % b);
+  }
 }
