@@ -1,6 +1,7 @@
+#include "BigInteger.hpp"
+
 #include <cctype>
 #include <exception>
-#include "BigInteger.hpp"
 
 BigInteger::BigInteger(const std::string& number) {
   ConstructFromString(number);
@@ -54,7 +55,7 @@ BigInteger& BigInteger::operator+=(const BigInteger& value) {
   }
 
   if (!is_negative_ && IsLessWithoutSign(value)) {
-    *this =  BigInteger::SubstractPositives(value, *this);
+    *this = BigInteger::SubstractPositives(value, *this);
     is_negative_ = true;
     return *this;
   }
@@ -79,11 +80,20 @@ BigInteger& BigInteger::operator-=(const BigInteger& value) {
       is_negative_ = true;
     }
 
+    if (IsZero()) {
+      is_negative_ = false;
+    }
+
     return *this;
   }
 
   if (!is_negative_ && value.is_negative_) {
     *this = SumPositives(*this, value);
+
+    if (IsZero()) {
+      is_negative_ = false;
+    }
+
     return *this;
   }
 
@@ -94,11 +104,20 @@ BigInteger& BigInteger::operator-=(const BigInteger& value) {
     } else {
       *this = SubstractPositives(value, *this);
     }
+
+    if (IsZero()) {
+      is_negative_ = false;
+    }
+
     return *this;
   }
 
   *this = SumPositives(*this, value);
   is_negative_ = true;
+
+  if (IsZero()) {
+    is_negative_ = false;
+  }
 
   return *this;
 }
@@ -119,7 +138,8 @@ BigInteger& BigInteger::operator/=(const BigInteger& other) {
   return *this;
 }
 
-[[nodiscard]] bool BigInteger::IsLessWithoutSign(const BigInteger& other) const {
+[[nodiscard]] bool BigInteger::IsLessWithoutSign(
+    const BigInteger& other) const {
   if (IsZero() && other.IsZero()) {
     return false;
   }
@@ -195,7 +215,7 @@ BigInteger BigInteger::SubstractPositives(const BigInteger& left,
       result.digits_.push_back(left_digit + 10 - right.digits_[index]);
       ++index;
       left_digit = left.digits_[index];
-      while(left.digits_[index] == 0) {
+      while (left.digits_[index] == 0) {
         left_digit = left.digits_[index];
         if (index < right.GetSize()) {
           result.digits_.push_back(left_digit + 9 - right.digits_[index]);
@@ -205,8 +225,8 @@ BigInteger BigInteger::SubstractPositives(const BigInteger& left,
         ++index;
       }
       left_digit = left.digits_[index];
-      left_digit -=1;
-      index -=1;
+      left_digit -= 1;
+      index -= 1;
       continue;
     }
 

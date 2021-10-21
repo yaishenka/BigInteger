@@ -223,6 +223,22 @@ TEST(Divide, CORRECT_2) {
   EXPECT_EQ(1000_bigint / 300_bigint, 1000 / 300);
 }
 
+TEST(Divide, CORRECT_3) {
+  EXPECT_EQ(24_bigint / 2_bigint, 24 / 2);
+}
+
+TEST(Mod, CORRECT_1) {
+  EXPECT_EQ(100_bigint % 2, 100 % 2);
+}
+
+TEST(Mod, CORRECT_2) {
+  EXPECT_EQ(101_bigint % 2, 101 % 2);
+}
+
+TEST(Mod, CORRECT_3) {
+  EXPECT_EQ(24_bigint % 2, 24 % 2);
+}
+
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);

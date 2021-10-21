@@ -66,11 +66,11 @@ class BigInteger {
     return copy;
   }
 
-  BigInteger operator+() {
+  BigInteger operator+() const {
     return *this;
   }
 
-  BigInteger operator-() {
+  BigInteger operator-() const {
     if (IsZero()) {
       return *this;
     }

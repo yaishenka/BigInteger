@@ -1,34 +1,10 @@
 #include <iostream>
 #include "BigInteger.hpp"
+#include "Calculator.hpp"
+
 
 int main() {
-  BigInteger a;
-  std::string op;
-  BigInteger b;
-
-  std::cin >> a >> op >> b;
-
-  if (op == "+") {
-    std::cout << (a + b);
-  } else if (op == "-") {
-    std::cout << (a - b);
-  } else if (op == "<") {
-    std::cout << (a < b);
-  } else if (op == "<=") {
-    std::cout << (a <= b);
-  } else if (op == ">") {
-    std::cout << (a > b);
-  } else if (op == ">=") {
-    std::cout << (a >= b);
-  } else if (op == "==") {
-    std::cout << (a == b);
-  } else if (op == "!=") {
-    std::cout << (a != b);
-  } else if (op == "*") {
-    std::cout << (a * b);
-  } else if (op == "/") {
-    std::cout << (a / b);
-  } else if (op == "%") {
-    std::cout << (a % b);
-  }
+  std::string expr;
+  std::getline(std::cin, expr);
+  std::cout << calculator::Calculator<int>::CalculateExpr(expr) << std::endl;
 }
